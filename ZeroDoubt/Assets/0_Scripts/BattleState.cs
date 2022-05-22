@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IMovementInputGetter
+public enum BattleState
 {
-    Vector2 GetInput();
+    Start,
+    PlayerTurn,
+    EnemyTurn,
+    Won,
+    Lost
 }
