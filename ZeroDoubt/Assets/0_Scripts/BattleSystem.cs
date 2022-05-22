@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Random = UnityEngine.Random;
 
 public class BattleSystem : MonoBehaviour
 {
@@ -11,17 +12,24 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameGeneralText;
 
     [SerializeField] private Character player;
-    
-    public Enemy CurrentEnemy { get; set; }
+
+    public List<Enemy> EnemiesList { get; set; } = new List<Enemy>();
+
+    public Enemy EnemyToAttack { get; set; }
 
     private void Start()
     {
         BattleState = BattleState.Start;
         
-        StartCoroutine(PlayerTurn());
+        StartCoroutine(GameStart());
+
+        foreach (var enemy in FindObjectsOfType<Enemy>())
+        {
+            EnemiesList.Add(enemy);
+        }
     }
 
-    private IEnumerator PlayerTurn()
+    private IEnumerator GameStart()
     {
         ChangeGeneralText("Fight Begins. Stay Strong");
         
@@ -32,46 +40,23 @@ public class BattleSystem : MonoBehaviour
         ChangeGeneralText("Your Turn. Choose an Action");
     }
 
-    // public IEnumerator PlayerAttack()
-    // {
-    //     if (BattleState != BattleState.PlayerTurn) yield break;
-    //
-    //     var isDead = CurrentEnemy.TakeDamage(player.Damage);
-    //     
-    //     ChangeGeneralText("You Dealt " + player.Damage + " Damage to Enemy!. Good Job");
-    //     
-    //     yield return new WaitForSeconds(2f);
-    //
-    //     if (isDead)
-    //     {
-    //         if (FindObjectsOfType<Enemy>() != null)
-    //             BattleState = BattleState.EnemyTurn;
-    //         else
-    //             BattleState = BattleState.Won;
-    //     }
-    //     else
-    //     {
-    //         BattleState = BattleState.EnemyTurn;
-    //         ChangeGeneralText("Enemy Turn");
-    //     }
-    // }
-    //
-    // public void ChooseAnEnemyToAttack()
-    // {
-    //     if (BattleState != BattleState.PlayerTurn) return;
-    //     
-    //     ChangeGeneralText("Choose an Enemy to Attack!");
-    // }
-    //
-    // public void HealPlayer()
-    // {
-    //     //heal player 
-    //     //change game state
-    //
-    //     if (BattleState != BattleState.PlayerTurn) return;
-    //     
-    //     BattleState = BattleState.EnemyTurn;
-    // }
+    public void EnemyTurn()
+    {
+        if(BattleState != BattleState.EnemyTurn) return;
+
+        StartCoroutine(ChooseEnemy());
+    }
+    
+    private IEnumerator ChooseEnemy()
+    {
+        yield return new WaitForSeconds(1f);
+        
+        var enemyIndex = Random.Range(0, EnemiesList.Count);
+        
+        EnemyToAttack = EnemiesList[enemyIndex];
+        
+        EnemyToAttack.ChooseBehaviour();
+    }
 
     public void ChangeGeneralText(string message)
     {
