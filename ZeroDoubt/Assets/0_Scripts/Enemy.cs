@@ -1,18 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Character
 {
-    // Start is called before the first frame update
-    void Start()
+    private Player player;
+
+    private void Awake()
     {
-        
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnMouseDown()
     {
+        player.CurrentEnemy = this;
         
+        player.StartCoroutine(player.PlayerAttack());
     }
 }
