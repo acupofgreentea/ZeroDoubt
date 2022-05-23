@@ -17,25 +17,21 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected Image healthBar;
 
     [SerializeField] protected BattleSystem battleSystem;
-    
-    private SpriteRenderer _spriteRenderer;
-    
-    
-    
+
     [SerializeField] private CharacterSO characterSO;
     
     
-    public string CharacterName { get; set; }
-
-    protected int characterLevel;
     
-    protected int healAmount;
-    public int Damage { get; set; }
+    public string CharacterName { get; private set; }
     public int CurrentHp { get; set; }
     protected int MaxHp { get; set; }
-
-
-    public bool TurnCompleted { get; set; } = false;
+    
+    
+    protected bool TurnCompleted { get; set; } = false;
+    
+    protected int characterLevel;
+    
+    private SpriteRenderer _spriteRenderer;
 
     private void OnEnable()
     {
@@ -44,10 +40,7 @@ public abstract class Character : MonoBehaviour
         CharacterName = characterSO.CharacterName;
         characterLevel = characterSO.CharacterLevel;
         _spriteRenderer.sprite = characterSO.Sprite;
-
-
-        healAmount = characterSO.HealAmount;
-        Damage = characterSO.Damage;
+        
         CurrentHp = characterSO.CurrentHp;
         MaxHp = characterSO.MaxHp;
     }
@@ -76,7 +69,7 @@ public abstract class Character : MonoBehaviour
             return false;
         }
     }
-    public void SetHealthBar()
+    protected void SetHealthBar()
     {
         healthBar.fillAmount = (float)CurrentHp / MaxHp;
         healthText.text = CurrentHp + " / " + MaxHp;

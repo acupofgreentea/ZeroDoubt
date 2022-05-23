@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Enemy : Character
+public class Enemy : Character, IAttack, IHeal
 {
     private Player player;
+    
+    [field: SerializeField] public int HealAmount { get; set; }
+    [field: SerializeField] public int Damage { get; set; }
     
     private void Awake()
     {
@@ -38,7 +41,8 @@ public class Enemy : Character
         StartCoroutine(TurnChangeRoutine());
     }
 
-    private void Attack()
+
+    public void Attack()
     {
         if (TurnCompleted) return;
         
@@ -48,8 +52,26 @@ public class Enemy : Character
 
         TurnCompleted = true;
     }
-
-    public IEnumerator TurnChangeRoutine()
+    public void Heal()
+    {
+        if (TurnCompleted) return;
+        
+        if (MaxHp >= CurrentHp + HealAmount)
+        {
+            CurrentHp += HealAmount;
+            battleSystem.ChangeGeneralText(this.CharacterName + " healed themselves for " + HealAmount + ".");
+        }
+        else
+        {
+            battleSystem.ChangeGeneralText(this.CharacterName + " healed themselves for " + (MaxHp - CurrentHp) + ".");
+            CurrentHp = MaxHp;
+        }
+        
+        SetHealthBar();
+    }
+    
+    
+    private IEnumerator TurnChangeRoutine()
     {
         // call skill method here
 
@@ -63,7 +85,7 @@ public class Enemy : Character
             
             case 1:
                 if(CurrentHp == MaxHp)
-                   Attack();
+                    Attack();
                 else
                     Heal(); 
                 
@@ -84,23 +106,5 @@ public class Enemy : Character
         }
 
         TurnCompleted = false;
-    }
-
-    private void Heal()
-    {
-        if (TurnCompleted) return;
-        
-        if (MaxHp >= CurrentHp + healAmount)
-        {
-            CurrentHp += healAmount;
-            battleSystem.ChangeGeneralText(this.CharacterName + " healed themselves for " + healAmount + ".");
-        }
-        else
-        {
-            battleSystem.ChangeGeneralText(this.CharacterName + " healed themselves for " + (MaxHp - CurrentHp) + ".");
-            CurrentHp = MaxHp;
-        }
-        
-        SetHealthBar();
     }
 }

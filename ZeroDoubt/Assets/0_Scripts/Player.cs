@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Player : Character
+public class Player : Character, IHeal, IAttack
 {
-    public Enemy CurrentEnemy { get; set; }
+    [Header("Text References")]
     
-    public int SkillIndex { get; private set; }
-
     [SerializeField] private TextMeshProUGUI attackDamageText;
     [SerializeField] private TextMeshProUGUI healAmountText;
+    
+    
+    [field: SerializeField] public int Damage { get; set; }
+    [field: SerializeField] public int HealAmount { get; set; }
+    
+
+    public Enemy CurrentEnemy { get; set; }
+    public int SkillIndex { get; private set; }
+    
 
     protected override void Start()
     {
         base.Start();
 
         attackDamageText.text = Damage.ToString();
-        healAmountText.text = healAmount.ToString();
+        healAmountText.text = HealAmount.ToString();
     }
 
     public void ChooseAnEnemy(int index)
@@ -28,6 +35,7 @@ public class Player : Character
 
         battleSystem.ChangeGeneralText("Choose an Enemy to Attack!");
     }
+
 
     public void Attack()
     {
@@ -60,10 +68,10 @@ public class Player : Character
             battleSystem.ChangeGeneralText("You are on Max HP. You can't heal yourself! Choose an another action.");
         else
         {
-            if (MaxHp >= CurrentHp + healAmount)
+            if (MaxHp >= CurrentHp + HealAmount)
             {
-                battleSystem.ChangeGeneralText("You Healed " + healAmount + " Yourself. Wise Choice!");
-                CurrentHp += healAmount;
+                battleSystem.ChangeGeneralText("You Healed " + HealAmount + " Yourself. Wise Choice!");
+                CurrentHp += HealAmount;
             }
             else
             {
@@ -78,7 +86,6 @@ public class Player : Character
             StartCoroutine(TurnChangeRoutine());
         }
     }
-
     public void DebuffEnemy(int damageDecrease)
     {
         if (battleSystem.BattleState != BattleState.PlayerTurn) return;
@@ -97,7 +104,9 @@ public class Player : Character
         StartCoroutine(TurnChangeRoutine());
     }
     
-    public IEnumerator TurnChangeRoutine()
+    
+    
+    private IEnumerator TurnChangeRoutine()
     {
         yield return new WaitForSeconds(2f);
 
