@@ -7,43 +7,67 @@ using UnityEngine.UI;
 
 public abstract class Character : MonoBehaviour
 {
-    [Header("Character Info")]
-    [SerializeField] protected string characterName;
-    [SerializeField] protected int characterLevel;
-    
-    [Header("Character Stats")]
-    
-    [SerializeField] protected int healAmount;
-    [field: SerializeField] public int Damage { get; private set; }
-    [field: SerializeField] public int CurrentHP { get; set;}
-    [field: SerializeField] public int MaxHP { get; set; }
-    
-    [Header("References")]
+    [Header("References")] 
     [SerializeField] protected TextMeshProUGUI characterNameText;
+
     [SerializeField] protected TextMeshProUGUI characterLevelText;
+
+    [SerializeField] protected TextMeshProUGUI healthText;
 
     [SerializeField] protected Image healthBar;
 
     [SerializeField] protected BattleSystem battleSystem;
+    
+    private SpriteRenderer _spriteRenderer;
+    
+    
+    
+    [SerializeField] private CharacterSO characterSO;
+    
+    
+    public string CharacterName { get; set; }
+
+    protected int characterLevel;
+    
+    protected int healAmount;
+    public int Damage { get; set; }
+    public int CurrentHp { get; set; }
+    protected int MaxHp { get; set; }
+
 
     public bool TurnCompleted { get; set; } = false;
-    
-    
+
+    private void OnEnable()
+    {
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        CharacterName = characterSO.CharacterName;
+        characterLevel = characterSO.CharacterLevel;
+        _spriteRenderer.sprite = characterSO.Sprite;
+
+
+        healAmount = characterSO.HealAmount;
+        Damage = characterSO.Damage;
+        CurrentHp = characterSO.CurrentHp;
+        MaxHp = characterSO.MaxHp;
+    }
+
+
     protected virtual void Start()
     {
-        CurrentHP = MaxHP;
+        CurrentHp = MaxHp;
         SetHealthBar();
-        characterNameText.text = characterName;
+        characterNameText.text = CharacterName;
         characterLevelText.text = "Lvl." + characterLevel.ToString();
     }
 
     public bool TakeDamage(int dmg)
     {
-        CurrentHP -= dmg;
-        
+        CurrentHp -= dmg;
+
         SetHealthBar();
 
-        if (CurrentHP <= 0)
+        if (CurrentHp <= 0)
         {
             return true;
         }
@@ -52,9 +76,9 @@ public abstract class Character : MonoBehaviour
             return false;
         }
     }
-
     public void SetHealthBar()
     {
-        healthBar.fillAmount = (float)CurrentHP / MaxHP;
+        healthBar.fillAmount = (float)CurrentHp / MaxHp;
+        healthText.text = CurrentHp + " / " + MaxHp;
     }
 }

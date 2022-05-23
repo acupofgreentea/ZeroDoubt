@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f123638174e04eb699036e736ee2a0aa, type: 3}
+  m_Name: Enemy 2
+  m_EditorClassIdentifier: 
+  <CharacterName>k__BackingField: Enemy 2
+  <CharacterLevel>k__BackingField: 1
+  <Sprite>k__BackingField: {fileID: -9095717837082945937, guid: 0804aa268261dac47aa9dc25dc0fd418, type: 3}
+  <HealAmount>k__BackingField: 3
+  <Damage>k__BackingField: 5
+  <CurrentHp>k__BackingField: 5
+  <MaxHp>k__BackingField: 5
