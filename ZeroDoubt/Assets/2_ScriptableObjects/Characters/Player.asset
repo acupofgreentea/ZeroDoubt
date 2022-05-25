@@ -15,7 +15,5 @@ MonoBehaviour:
   <CharacterName>k__BackingField: Player
   <CharacterLevel>k__BackingField: 0
   <Sprite>k__BackingField: {fileID: 7482667652216324306, guid: 6552dd3ff4a10b747ba08e8729814bd3, type: 3}
-  <HealAmount>k__BackingField: 5
-  <Damage>k__BackingField: 7
-  <CurrentHp>k__BackingField: 0
+  <CurrentHp>k__BackingField: 15
   <MaxHp>k__BackingField: 20

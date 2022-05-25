@@ -5,8 +5,16 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
+public enum CharacterTypes
+{
+    Player,
+    Enemy
+}
+
 public abstract class Character : MonoBehaviour
 {
+    [field: SerializeField] public CharacterTypes CharacterTypes { get; set; }
+
     [Header("References")] 
     [SerializeField] protected TextMeshProUGUI characterNameText;
 
@@ -16,18 +24,20 @@ public abstract class Character : MonoBehaviour
 
     [SerializeField] protected Image healthBar;
 
-    [SerializeField] protected BattleSystem battleSystem;
-
     [SerializeField] private CharacterSO characterSO;
     
-    
+    [field: SerializeField] public BattleSystem BattleSystem {get; set;}
+
+    public Character CurrentEnemy { get; set; }
+
+    [field: SerializeField] public int Damage { get; set; }
     
     public string CharacterName { get; private set; }
     public int CurrentHp { get; set; }
-    protected int MaxHp { get; set; }
+    public int MaxHp { get; set; }
     
     
-    protected bool TurnCompleted { get; set; } = false;
+    public bool TurnCompleted { get; set; } = false;
     
     protected int characterLevel;
     
@@ -45,10 +55,13 @@ public abstract class Character : MonoBehaviour
         MaxHp = characterSO.MaxHp;
     }
 
+    private void OnDisable()
+    {
+        TurnCompleted = false;
+    }
 
     protected virtual void Start()
     {
-        CurrentHp = MaxHp;
         SetHealthBar();
         characterNameText.text = CharacterName;
         characterLevelText.text = "Lvl." + characterLevel.ToString();
@@ -69,9 +82,13 @@ public abstract class Character : MonoBehaviour
             return false;
         }
     }
-    protected void SetHealthBar()
+    public void SetHealthBar()
     {
         healthBar.fillAmount = (float)CurrentHp / MaxHp;
+
+        if (CurrentHp <= 0) CurrentHp = 0;
         healthText.text = CurrentHp + " / " + MaxHp;
     }
+
+    public abstract IEnumerator TurnChangeRoutine();
 }

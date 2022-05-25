@@ -52,7 +52,10 @@ MonoBehaviour:
   healthText: {fileID: 7806159197137720660}
   healthBar: {fileID: 3105274295902663966}
   battleSystem: {fileID: 0}
-  characterSO: {fileID: 11400000, guid: abc400c8cdb83e04691a4f3d6e93fd8a, type: 2}
+  characterSO: {fileID: 11400000, guid: 04cd0640938b9ca499783468624ac43c, type: 2}
+  <HealAmount>k__BackingField: 5
+  <Damage>k__BackingField: 1
+  <DamageToDecrease>k__BackingField: 1
 --- !u!61 &3105274296521784951
 BoxCollider2D:
   m_ObjectHideFlags: 0

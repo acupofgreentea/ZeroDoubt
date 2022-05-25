@@ -4,107 +4,63 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Enemy : Character, IAttack, IHeal
+public class Enemy : Character
 {
+    [SerializeField] private List<AbilitySO> abilites;
+
     private Player player;
-    
-    [field: SerializeField] public int HealAmount { get; set; }
-    [field: SerializeField] public int Damage { get; set; }
-    
+
+
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-    }
 
+        this.CurrentEnemy = player;
+    }
+    
     private void OnMouseDown()
     {
         player.CurrentEnemy = this;
-
-        SetPlayerSkill();
+        
+        player.UseSkill();
     }
-
-    private void SetPlayerSkill()
-    {
-        switch (player.SkillIndex)
-        {
-            case 0:
-                player.Attack();
-                break;
-            case 1:
-                player.DebuffEnemy(1);
-                break;
-        }
-    }
-
+    
     public void ChooseBehaviour()
     {
         StartCoroutine(TurnChangeRoutine());
     }
 
-
-    public void Attack()
+    public void ChooseAbility()
     {
-        if (TurnCompleted) return;
-        
-        battleSystem.ChangeGeneralText(this.CharacterName + " dealt You " + Damage + " Damage. Be Careful!");
-        
-        var isDead = player.TakeDamage(Damage);
+        var skill = Random.Range(0, abilites.Count);
 
-        TurnCompleted = true;
+        if(CurrentHp == MaxHp)
+        {
+            if (skill == 0) skill++;
+        }
+
+        abilites[skill].Perform(this);
     }
-    public void Heal()
-    {
-        if (TurnCompleted) return;
-        
-        if (MaxHp >= CurrentHp + HealAmount)
-        {
-            CurrentHp += HealAmount;
-            battleSystem.ChangeGeneralText(this.CharacterName + " healed themselves for " + HealAmount + ".");
-        }
-        else
-        {
-            battleSystem.ChangeGeneralText(this.CharacterName + " healed themselves for " + (MaxHp - CurrentHp) + ".");
-            CurrentHp = MaxHp;
-        }
-        
-        SetHealthBar();
-    }
-    
-    
-    private IEnumerator TurnChangeRoutine()
-    {
-        // call skill method here
 
-        var skill = Random.Range(0, 2);
-
-        switch (skill)
-        {
-            case 0:
-                Attack();
-                break;
-            
-            case 1:
-                if(CurrentHp == MaxHp)
-                    Attack();
-                else
-                    Heal(); 
-                
-                break;
-        }
+    public override IEnumerator TurnChangeRoutine()
+    {
+        ChooseAbility();
         
         yield return new WaitForSeconds(2f);
         
         if (player.CurrentHp <= 0)
         {
-            battleSystem.BattleState = BattleState.Lost;
-            battleSystem.ChangeGeneralText("You Lost :(");
+            BattleSystem.BattleState = BattleState.Lost;
+            BattleSystem.ChangeGeneralText("You Lost :(");
         }
         else
         {
-            battleSystem.BattleState = BattleState.PlayerTurn;
-            battleSystem.ChangeGeneralText("Your Turn");
+            BattleSystem.BattleState = BattleState.PlayerTurn;
+            BattleSystem.ChangeGeneralText("Your Turn");
         }
 
         TurnCompleted = false;
     }
+
+    
 }

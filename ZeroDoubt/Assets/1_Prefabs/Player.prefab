@@ -124,13 +124,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e4a6229f75a4e47b28c89d2fcce3d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Player
-  characterLevel: 0
-  healAmount: 5
-  <Damage>k__BackingField: 5
-  <CurrentHP>k__BackingField: 0
-  <MaxHP>k__BackingField: 50
   characterNameText: {fileID: 0}
   characterLevelText: {fileID: 0}
+  healthText: {fileID: 0}
   healthBar: {fileID: 0}
   battleSystem: {fileID: 0}
+  characterSO: {fileID: 11400000, guid: 1ab2fe87631b0be41a3d06ee13d7d6b5, type: 2}
+  attackDamageText: {fileID: 0}
+  healAmountText: {fileID: 0}
+  <Damage>k__BackingField: 5
+  <HealAmount>k__BackingField: 3
+  <DamageToDecrease>k__BackingField: 2

@@ -13,9 +13,9 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] private Character player;
 
-    public List<Enemy> EnemiesList { get; set; } = new List<Enemy>();
+    public List<Character> EnemiesList { get; set; } = new List<Character>();
 
-    public Enemy EnemyToAttack { get; set; }
+    public Character EnemyToAttack { get; set; }
 
     private void Start()
     {
@@ -54,8 +54,10 @@ public class BattleSystem : MonoBehaviour
         var enemyIndex = Random.Range(0, EnemiesList.Count);
         
         EnemyToAttack = EnemiesList[enemyIndex];
-        
-        EnemyToAttack.ChooseBehaviour();
+
+        var routine = EnemyToAttack.TurnChangeRoutine();
+
+        EnemyToAttack.StartCoroutine(routine);
     }
 
     public void ChangeGeneralText(string message)
