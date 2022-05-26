@@ -14,34 +14,41 @@ public enum CharacterTypes
 public abstract class Character : MonoBehaviour
 {
     [field: SerializeField] public CharacterTypes CharacterTypes { get; set; }
+    [field: SerializeField] public BattleSystem BattleSystem { get; set; }
+    [field: SerializeField] public int Damage { get; set; }
+    [field: SerializeField] public int HealAmount { get; set; }
+
 
     [Header("References")] 
     [SerializeField] protected TextMeshProUGUI characterNameText;
 
     [SerializeField] protected TextMeshProUGUI characterLevelText;
 
-    [SerializeField] protected TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI attackDamageText;
+
+    [SerializeField] private TextMeshProUGUI healAmountText;
+
+    [SerializeField] protected TextMeshProUGUI healthBarText;
+
 
     [SerializeField] protected Image healthBar;
 
     [SerializeField] private CharacterSO characterSO;
-    
-    [field: SerializeField] public BattleSystem BattleSystem {get; set;}
+
+
 
     public Character CurrentEnemy { get; set; }
-
-    [field: SerializeField] public int Damage { get; set; }
-    
     public string CharacterName { get; private set; }
     public int CurrentHp { get; set; }
     public int MaxHp { get; set; }
-    
-    
     public bool TurnCompleted { get; set; } = false;
-    
+
+
     protected int characterLevel;
     
     private SpriteRenderer _spriteRenderer;
+
+
 
     private void OnEnable()
     {
@@ -65,6 +72,14 @@ public abstract class Character : MonoBehaviour
         SetHealthBar();
         characterNameText.text = CharacterName;
         characterLevelText.text = "Lvl." + characterLevel.ToString();
+
+        UpdateStatsTexts();
+    }
+
+    public void UpdateStatsTexts()
+    {
+        attackDamageText.text = Damage.ToString();
+        healAmountText.text = HealAmount.ToString();
     }
 
     public bool TakeDamage(int dmg)
@@ -87,7 +102,7 @@ public abstract class Character : MonoBehaviour
         healthBar.fillAmount = (float)CurrentHp / MaxHp;
 
         if (CurrentHp <= 0) CurrentHp = 0;
-        healthText.text = CurrentHp + " / " + MaxHp;
+        healthBarText.text = CurrentHp + " / " + MaxHp;
     }
 
     public abstract IEnumerator TurnChangeRoutine();

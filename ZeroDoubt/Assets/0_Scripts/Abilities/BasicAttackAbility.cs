@@ -6,13 +6,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BasicAttack", menuName = "Ability/BasicAttack")]
 public class BasicAttackAbility : AbilitySO
 {
-    [field: SerializeField] public int Damage {get; set;}
-
     public override void Perform(Character character)
     {
         var battleSystem = character.BattleSystem;
 
-        if(character.CharacterTypes == CharacterTypes.Player)
+
+        if (character.CharacterTypes == CharacterTypes.Player)
             if (battleSystem.BattleState != BattleState.PlayerTurn) return;
 
         if (character.CharacterTypes == CharacterTypes.Enemy)
@@ -20,10 +19,10 @@ public class BasicAttackAbility : AbilitySO
 
         if (character.TurnCompleted) return;
 
-        var isDead = character.CurrentEnemy.TakeDamage(Damage);
+        var isDead = character.CurrentEnemy.TakeDamage(character.Damage);
 
 
-        battleSystem.ChangeGeneralText(character.CharacterName + " Dealt " + Damage + " Damage to " + character.CurrentEnemy.CharacterName + " !");
+        battleSystem.ChangeGeneralText(character.CharacterName + " Dealt " + character.Damage + " Damage to " + character.CurrentEnemy.CharacterName + " !");
 
         character.TurnCompleted = true;
 

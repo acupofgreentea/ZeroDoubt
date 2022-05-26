@@ -10,6 +10,8 @@ public class Enemy : Character
 
     private Player player;
 
+    private bool isSkillChosen = false;
+
 
     private void Awake()
     {
@@ -32,6 +34,8 @@ public class Enemy : Character
 
     public void ChooseAbility()
     {
+        if (isSkillChosen) return;
+
         var skill = Random.Range(0, abilites.Count);
 
         if(CurrentHp == MaxHp)
@@ -40,6 +44,8 @@ public class Enemy : Character
         }
 
         abilites[skill].Perform(this);
+
+        isSkillChosen = true;
     }
 
     public override IEnumerator TurnChangeRoutine()
@@ -59,6 +65,7 @@ public class Enemy : Character
             BattleSystem.ChangeGeneralText("Your Turn");
         }
 
+        isSkillChosen = false;
         TurnCompleted = false;
     }
 

@@ -11,13 +11,10 @@ public class DecreaseDamageAbility : AbilitySO
     {
         var battleSystem = character.BattleSystem;
 
-        var player = character.CharacterTypes == CharacterTypes.Player;
-        var enemy = character.CharacterTypes == CharacterTypes.Enemy;
-
-        if (player)
+        if (character.CharacterTypes == CharacterTypes.Player)
             if (battleSystem.BattleState != BattleState.PlayerTurn) return;
 
-        if (enemy)
+        if (character.CharacterTypes == CharacterTypes.Enemy)
             if (battleSystem.BattleState != BattleState.EnemyTurn) return;
 
 
@@ -28,6 +25,8 @@ public class DecreaseDamageAbility : AbilitySO
             battleSystem.ChangeGeneralText(character.CharacterName + " has decreased " + character.CurrentEnemy.CharacterName + "damage by " + DamageToDecrease + "!");
             character.CurrentEnemy.Damage -= DamageToDecrease;
 
+            character.CurrentEnemy.UpdateStatsTexts();
+
             character.TurnCompleted = true;
 
             var routine = character.TurnChangeRoutine();
@@ -36,9 +35,9 @@ public class DecreaseDamageAbility : AbilitySO
         }
         else
         {
-            if(player)
+            if(character.CharacterTypes == CharacterTypes.Player)
                 battleSystem.ChangeGeneralText(character.CharacterName + " are no longer able to decrease " + character.CurrentEnemy.CharacterName + "'s damage. Choose an another Action.");
-            if (enemy)
+            if (character.CharacterTypes == CharacterTypes.Enemy)
                 character.GetComponent<Enemy>().ChooseBehaviour();
         }
 
