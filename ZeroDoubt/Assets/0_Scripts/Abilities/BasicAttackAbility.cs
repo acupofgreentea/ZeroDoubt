@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -19,10 +17,13 @@ public class BasicAttackAbility : AbilitySO
 
         if (character.TurnCompleted) return;
 
+
         var isDead = character.CurrentEnemy.TakeDamage(character.Damage);
 
 
         battleSystem.ChangeGeneralText(character.CharacterName + " Dealt " + character.Damage + " Damage to " + character.CurrentEnemy.CharacterName + " !");
+
+        character.CurrentEnemy.UpdateAbilityText($"-{character.Damage} Health");
 
         character.TurnCompleted = true;
 

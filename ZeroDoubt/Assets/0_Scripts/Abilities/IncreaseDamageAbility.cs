@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "IncreaseDamage", menuName = "Ability/IncreaseDamage")]
@@ -17,7 +15,10 @@ public class IncreaseDamageAbility : AbilitySO
         if (character.CharacterTypes == CharacterTypes.Enemy)
             if (battleSystem.BattleState != BattleState.EnemyTurn) return;
 
+
         battleSystem.ChangeGeneralText(character.CharacterName + " has increased themselves damage by " + DamageToIncrease + "!");
+
+        character.UpdateAbilityText($"+{DamageToIncrease} Damage");
 
         character.Damage += DamageToIncrease;
 

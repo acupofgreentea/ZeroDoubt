@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Heal", menuName = "Ability/Heal")]
@@ -26,11 +25,13 @@ public class HealAbility : AbilitySO
             if (character.MaxHp >= character.CurrentHp + character.HealAmount)
             {
                 character.BattleSystem.ChangeGeneralText(character.CharacterName + " Healed " + character.HealAmount + " themselves. Wise Choice!");
+                character.UpdateAbilityText($"+{character.HealAmount} Health");
                 character.CurrentHp += character.HealAmount;
             }
             else
             {
                 character.BattleSystem.ChangeGeneralText(character.CharacterName + " Healed " + (character.MaxHp - character.CurrentHp) + " themselves. Wise Choice!");
+                character.UpdateAbilityText($"+{character.MaxHp - character.CurrentHp} Health");
                 character.CurrentHp = character.MaxHp;
             }
             

@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public enum CharacterTypes
 {
@@ -19,6 +18,7 @@ public abstract class Character : MonoBehaviour
     [field: SerializeField] public int HealAmount { get; set; }
 
 
+
     [Header("References")] 
     [SerializeField] protected TextMeshProUGUI characterNameText;
 
@@ -29,7 +29,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] private TextMeshProUGUI healAmountText;
 
     [SerializeField] protected TextMeshProUGUI healthBarText;
-
+    
+    [SerializeField] public TextMeshProUGUI abilityText;
 
     [SerializeField] protected Image healthBar;
 
@@ -47,7 +48,6 @@ public abstract class Character : MonoBehaviour
     protected int characterLevel;
     
     private SpriteRenderer _spriteRenderer;
-
 
 
     private void OnEnable()
@@ -73,6 +73,8 @@ public abstract class Character : MonoBehaviour
         characterNameText.text = CharacterName;
         characterLevelText.text = "Lvl." + characterLevel.ToString();
 
+        abilityText.enabled = false;
+
         UpdateStatsTexts();
     }
 
@@ -80,6 +82,13 @@ public abstract class Character : MonoBehaviour
     {
         attackDamageText.text = Damage.ToString();
         healAmountText.text = HealAmount.ToString();
+    }
+
+    public void UpdateAbilityText(string message)
+    {
+        abilityText.enabled = true;
+        abilityText.text = message;
+        abilityText.transform.DOMoveY(abilityText.transform.position.y + 0.5f, 0.8f).OnComplete(()=> abilityText.enabled = false);
     }
 
     public bool TakeDamage(int dmg)
